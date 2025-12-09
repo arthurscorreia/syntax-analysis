@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* --- Estrutura da Árvore Sintática (AST) --- */
+
 typedef struct ASTNode {
     char *type;                 // Ex: "declaration", "if statement", "soma"
     char *value;                // Ex: "x", "5", "inteiro" (pode ser NULL)
@@ -22,7 +22,7 @@ void yyerror(const char *s);
 extern FILE *yyin;
 %}
 
-/* --- Definição da Union (Tipos de dados que transitam entre Flex e Bison) --- */
+
 %union {
     int intval;
     double floatval;
@@ -30,7 +30,7 @@ extern FILE *yyin;
     struct ASTNode *node;
 }
 
-/* --- Definição dos Tokens (Vindos do Flex) --- */
+
 /* Palavras-chave */
 %token T_SE T_SENAO T_ENQUANTO T_ATE T_DEVOLVA T_IMPRIMA T_RECEBA
 %token T_INTEIRO_KW T_QUEBRADO_KW T_CARACTERE_KW T_TEXTO_KW T_FATO_KW T_SERPENTE_KW T_VAZIO_KW
@@ -45,7 +45,7 @@ extern FILE *yyin;
 %token T_SOMA T_SUB T_MULT T_DIV T_ATRIBUICAO
 %token T_PV T_VIRGULA T_LPAREN T_RPAREN T_LCHAVE T_RCHAVE
 
-/* --- Definição dos Tipos Não-Terminais (Nós da Árvore) --- */
+/* Definição dos Tipos Não-Terminais */
 %type <node> program statement_list statement block
 %type <node> declaration assignment input_stmt output_stmt return_stmt
 %type <node> if_stmt while_stmt loop_ate_stmt
@@ -53,7 +53,7 @@ extern FILE *yyin;
 %type <node> type var_type function_def param_list param
 %type <node> vector_decl vector_elements
 
-/* Precedência de operadores (para evitar ambiguidade no 'se/senao' e math) */
+/* Precedência de operadores */
 %nonassoc T_SENAO
 %left T_OU
 %left T_E
@@ -65,7 +65,7 @@ extern FILE *yyin;
 
 %%
 
-/* --- Gramática --- */
+/* Gramática */
 
 program:
     statement_list {
@@ -110,7 +110,7 @@ block:
     }
     ;
 
-/* Declaração de Variáveis: tipo id; ou tipo id = valor; */
+/* Declaração de Variáveis */
 declaration:
     type T_ID {
         $$ = create_node("declaration", NULL);
@@ -125,7 +125,7 @@ declaration:
     }
     ;
 
-/* Declaração de Vetores (Serpente): serpente id (tipo) = (v1, v2); */
+/* Declaração de Vetores */
 vector_decl:
     T_SERPENTE_KW T_ID T_LPAREN type T_RPAREN T_ATRIBUICAO T_LPAREN vector_elements T_RPAREN {
         $$ = create_node("vector_declaration", $2); // ID no value
@@ -155,7 +155,7 @@ type:
     | T_VAZIO_KW    { $$ = create_node("type", "vazio"); }
     ;
 
-/* Atribuição: id = expr */
+/* Atribuição */
 assignment:
     T_ID T_ATRIBUICAO expression {
         $$ = create_node("attribution", NULL);
@@ -164,7 +164,7 @@ assignment:
     }
     ;
 
-/* Controle de Fluxo: SE / SENAO */
+/* Controle de Fluxo */
 if_stmt:
     T_SE T_LPAREN expression T_RPAREN block {
         $$ = create_node("if_statement", NULL);
@@ -182,7 +182,7 @@ if_stmt:
     }
     ;
 
-/* Laços: Enquanto e Ate */
+/* Laços */
 while_stmt:
     T_ENQUANTO T_LPAREN expression T_RPAREN block {
         $$ = create_node("while_loop", NULL);
@@ -330,9 +330,6 @@ factor:
 
 %%
 
-/* --- Funções Auxiliares em C --- */
-
-/* Cria um novo nó da AST */
 ASTNode* create_node(char *type, char *value) {
     ASTNode *node = (ASTNode*) malloc(sizeof(ASTNode));
     node->type = strdup(type);
@@ -343,28 +340,17 @@ ASTNode* create_node(char *type, char *value) {
     return node;
 }
 
-/* Adiciona um filho a um nó pai */
 void add_child(ASTNode *parent, ASTNode *child) {
     parent->child_count++;
     parent->children = (ASTNode**) realloc(parent->children, parent->child_count * sizeof(ASTNode*));
     parent->children[parent->child_count - 1] = child;
 }
 
-/* Imprime a árvore recursivamente (formato solicitado) */
 void print_tree(ASTNode *node, int level) {
     if (!node) return;
 
-    // Indentação baseada no nível
     for (int i = 0; i < level; i++) printf("  ");
-
-    // Imprime Tipo
     printf("%s", node->type);
-
-    // Se tiver valor, imprime na linha de baixo (ou ao lado, dependendo da preferência)
-    // O exemplo do PDF mostra o valor na linha de baixo com mesma indentação do pai?
-    // O exemplo mostra: "attribution" (pai), depois "X" (filho), depois "5" (filho).
-    // Mas nós tipo INT X, o X é valor.
-    // Vamos imprimir o valor se existir
     if (node->value) {
         printf("\n");
         for (int i = 0; i < level + 1; i++) printf("  ");

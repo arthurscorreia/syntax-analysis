@@ -73,7 +73,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* --- Estrutura da Árvore Sintática (AST) --- */
+
 typedef struct ASTNode {
     char *type;                 // Ex: "declaration", "if statement", "soma"
     char *value;                // Ex: "x", "5", "inteiro" (pode ser NULL)
@@ -1928,9 +1928,6 @@ yyreturnlab:
 #line 331 "parser.y"
 
 
-/* --- Funções Auxiliares em C --- */
-
-/* Cria um novo nó da AST */
 ASTNode* create_node(char *type, char *value) {
     ASTNode *node = (ASTNode*) malloc(sizeof(ASTNode));
     node->type = strdup(type);
@@ -1941,28 +1938,17 @@ ASTNode* create_node(char *type, char *value) {
     return node;
 }
 
-/* Adiciona um filho a um nó pai */
 void add_child(ASTNode *parent, ASTNode *child) {
     parent->child_count++;
     parent->children = (ASTNode**) realloc(parent->children, parent->child_count * sizeof(ASTNode*));
     parent->children[parent->child_count - 1] = child;
 }
 
-/* Imprime a árvore recursivamente (formato solicitado) */
 void print_tree(ASTNode *node, int level) {
     if (!node) return;
 
-    // Indentação baseada no nível
     for (int i = 0; i < level; i++) printf("  ");
-
-    // Imprime Tipo
     printf("%s", node->type);
-
-    // Se tiver valor, imprime na linha de baixo (ou ao lado, dependendo da preferência)
-    // O exemplo do PDF mostra o valor na linha de baixo com mesma indentação do pai?
-    // O exemplo mostra: "attribution" (pai), depois "X" (filho), depois "5" (filho).
-    // Mas nós tipo INT X, o X é valor.
-    // Vamos imprimir o valor se existir
     if (node->value) {
         printf("\n");
         for (int i = 0; i < level + 1; i++) printf("  ");

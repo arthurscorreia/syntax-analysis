@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "parser.tab.h" // Inclui os tokens gerados pelo Bison
 
-/* Não precisamos mais definir TokenType enum aqui, o Bison define */
 %}
 
 %option noyywrap
