@@ -67,7 +67,7 @@ extern int yydebug;
     T_TEXTO_KW = 268,              /* T_TEXTO_KW  */
     T_FATO_KW = 269,               /* T_FATO_KW  */
     T_SERPENTE_KW = 270,           /* T_SERPENTE_KW  */
-    T_VAZIO_KW = 271,              /* T_VAZIO_KW  */
+    T_NADA = 271,                  /* T_NADA  */
     T_E = 272,                     /* T_E  */
     T_OU = 273,                    /* T_OU  */
     T_NAO = 274,                   /* T_NAO  */
@@ -102,7 +102,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "parser.y"
+#line 23 "parser.y"
 
     int intval;
     double floatval;

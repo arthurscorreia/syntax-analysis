@@ -35,7 +35,7 @@ CARACTERE_LITERAL   '[^']'
 "devolva"      { return T_DEVOLVA; }
 "caractere"    { return T_CARACTERE_KW; }
 "texto"        { return T_TEXTO_KW; }
-"vazio"        { return T_VAZIO_KW; }
+"nada"         { return T_NADA; }
 "imprima"      { return T_IMPRIMA; }
 "receba"       { return T_RECEBA; }
 "serpente"     { return T_SERPENTE_KW; }
@@ -48,11 +48,12 @@ CARACTERE_LITERAL   '[^']'
 {QUEBRADO}     { yylval.strval = strdup(yytext); return T_QUEBRADO_LIT; }
 {TEXTO_LITERAL} { yylval.strval = strdup(yytext); return T_TEXTO_LIT; }
 {CARACTERE_LITERAL} { yylval.strval = strdup(yytext); return T_CARACTERE_LIT; }
+
 "real"         { yylval.strval = strdup(yytext); return T_FATO_LIT; }
 "fake"         { yylval.strval = strdup(yytext); return T_FATO_LIT; }
 
 {ID}           {
-                 yylval.strval = strdup(yytext); // Passamos o nome para a árvore
+                 yylval.strval = strdup(yytext);
                  return T_ID;
                }
 
@@ -77,6 +78,6 @@ CARACTERE_LITERAL   '[^']'
 
 .              {
                  fprintf(stderr, "Erro Léxico na linha %d: %s\n", yylineno, yytext);
-                 /* Não retornamos erro fatal, tentamos continuar ou ignorar */
                }
 
+%%
