@@ -14,7 +14,7 @@ This project implements a **lexical analyzer** for a simplified programming lang
 The project integrates **Bison** and **Flex** to validate the grammatical structure of the source code and generate an **Syntax Tree**. The main files are:
 
 - **`parser.y` (Bison)**: Defines the context-free grammar rules, precedence of operators, and the logic to build the tree nodes.
-- **`scanner.l` (Flex)**: Tokenizes the input and passes semantic values to the parser.
+- **`scanner_c.l` (Flex)**: Tokenizes the input and passes semantic values to the parser.
 
 ---
 
