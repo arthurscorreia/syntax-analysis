@@ -102,7 +102,7 @@ The main file of the project is **`scanner_c.l`**, which includes:
 
 ## Documentation
 The complete project report (in Portuguese) can be found below:
-[Project Report (PDF)](./relatorio.pdf)
+[Project Report (PDF)](./trabalho2-relatorio.pdf)
 
 ---
 
